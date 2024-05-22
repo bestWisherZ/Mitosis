@@ -7,7 +7,7 @@
 
 所有节点都加入所有topic并只订阅自己分片的topic 中继分片节点根据区块头中outboundDst在相应的topic中广播区块头
 
-共识中 nodeId % nodeNumPerShard == 1 的是leader（config中设置的）
+共识中 nodeId % nodeNumPerShard == 0 的是leader（config中设置的）
 
 commit后shard中各节点都需要广播到对方shard
 

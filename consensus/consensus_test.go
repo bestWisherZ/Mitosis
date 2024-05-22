@@ -23,8 +23,8 @@ func NewConfig(nodeId uint32) *config.Config {
 	topo := config.Topology{
 		RShardIds: []uint32{1, 2},
 		PShardIds: map[uint32][]uint32{
-			1: {1001, 1002},
-			2: {1003, 1004},
+			1: {1001, 1002, 1003, 1004, 1005, 1006, 1007, 1008},
+			2: {1009, 1010, 1011, 1012, 1013, 1014, 1015, 1016},
 		},
 	}
 
@@ -37,7 +37,7 @@ func NewConfig(nodeId uint32) *config.Config {
 		accounts[i] = common.HexToAddress(a)
 	}
 
-	bootnode := "/ip4/127.0.0.1/tcp/54321/p2p/12D3KooWSScaw1zaPERB3mT2R3hmwavHKMiTNPGtR8dNdeZYrwNV"
+	bootnode := "/ip4/127.0.0.1/tcp/54321/p2p/12D3KooWGmz8cFNzEVtvVUBfS9aJYY3gvJGndhm4AJH4VrMsXaJM"
 
 	return config.NewConfig("test", topo, 4, nodeId, accounts, bootnode)
 }
@@ -72,7 +72,7 @@ func TestNewBFTProtocol(t *testing.T) {
 	}
 
 	var bfts []*BFTProtocol
-	for nodeId := uint32(9); nodeId <= 24; nodeId++ {
+	for nodeId := uint32(9); nodeId <= 72; nodeId++ {
 		bft := NewBFTProtocolWithId(nodeId)
 		bft.Start()
 		bfts = append(bfts, bft)
