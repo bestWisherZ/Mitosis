@@ -3,6 +3,7 @@ package types
 import (
 	"encoding/json"
 	"errors"
+	"strings"
 
 	"github.com/KyrinCode/Mitosis/message/payload"
 	"github.com/ethereum/go-ethereum/common"
@@ -13,32 +14,32 @@ import (
 
 // 针对不同的协议层应用，在此注册Data解析结构
 
-type DataTemplate struct {
-	Parameter1 uint32 `json:"parameter1"`
-	Parameter2 string `json:"parameter2"`
-	Parameter3 []byte `json:"parameter3"`
-}
+// type DataTemplate struct {
+// 	Parameter1 uint32 `json:"parameter1"`
+// 	Parameter2 string `json:"parameter2"`
+// 	Parameter3 []byte `json:"parameter3"`
+// }
 
-func NewDataTemplate(p1 uint32, p2 string, p3 []byte) *DataTemplate {
-	dataTemplate := DataTemplate{
-		Parameter1: p1,
-		Parameter2: p2,
-		Parameter3: p3,
-	}
-	return &dataTemplate
-}
+// func NewDataTemplate(p1 uint32, p2 string, p3 []byte) *DataTemplate {
+// 	dataTemplate := DataTemplate{
+// 		Parameter1: p1,
+// 		Parameter2: p2,
+// 		Parameter3: p3,
+// 	}
+// 	return &dataTemplate
+// }
 
-func (d DataTemplate) MarshalBinary() []byte {
-	tBytes, err := rlp.EncodeToBytes(d)
-	if err != nil {
-		log.Error("Tx Encode To Bytes Error", err)
-	}
-	return tBytes
-}
+// func (d DataTemplate) MarshalBinary() []byte {
+// 	tBytes, err := rlp.EncodeToBytes(d)
+// 	if err != nil {
+// 		log.Error("Tx Encode To Bytes Error", err)
+// 	}
+// 	return tBytes
+// }
 
-func (d *DataTemplate) UnmarshalBinary(data []byte) error {
-	return rlp.DecodeBytes(data, d)
-}
+// func (d *DataTemplate) UnmarshalBinary(data []byte) error {
+// 	return rlp.DecodeBytes(data, d)
+// }
 
 // FromAddr and Signature are exclusive
 type Transaction struct {
@@ -51,9 +52,11 @@ type Transaction struct {
 	// Nonce     uint64         `json:"Nonce"`
 	Hash common.Hash `json:"Hash"`
 	// Signature []byte         `json:"Signature"`
+	
+	Tag1 string `json:"Tag1"`
 }
 
-func NewTransaction(fromShard, toShard uint32, fromAddr, toAddr [20]byte, value uint64, dataBytes []byte) *Transaction {
+func NewTransaction(fromShard, toShard uint32, fromAddr, toAddr [20]byte, value uint64, dataBytes []byte, tag1 string) *Transaction {
 	tx := Transaction{
 		FromShard: fromShard,
 		FromAddr:  fromAddr,
@@ -62,6 +65,8 @@ func NewTransaction(fromShard, toShard uint32, fromAddr, toAddr [20]byte, value 
 		Value:     value,
 		DataBytes: dataBytes,
 		// Nonce:     nonce,
+
+		Tag1: tag1,
 	}
 	tx.Hash = tx.ComputeHash()
 	// tx.Signature = make([]byte, 0)
@@ -77,6 +82,8 @@ func (t Transaction) ComputeHash() common.Hash {
 	copy(toAddr[:], t.ToAddr[:])
 	copy(dataBytes[:], t.DataBytes[:])
 
+	tag1 := strings.Clone(t.Tag1)
+
 	txForHash := Transaction{
 		FromShard: t.FromShard,
 		FromAddr:  fromAddr,
@@ -85,6 +92,8 @@ func (t Transaction) ComputeHash() common.Hash {
 		Value:     t.Value,
 		DataBytes: dataBytes,
 		// Nonce:     t.Nonce,
+
+		Tag1: tag1,
 	}
 	tBytes, err := rlp.EncodeToBytes(txForHash)
 	if err != nil {
@@ -122,6 +131,8 @@ func (t Transaction) Copy() payload.Safe {
 	copy(hash[:], t.Hash[:])
 	// copy(signature[:], t.Signature[:])
 
+	tag1 := strings.Clone(t.Tag1)
+
 	return Transaction{
 		FromShard: t.FromShard,
 		FromAddr:  fromAddr,
@@ -132,6 +143,8 @@ func (t Transaction) Copy() payload.Safe {
 		// Nonce:     t.Nonce,
 		Hash: hash,
 		// Signature: signature,
+
+		Tag1: tag1,
 	}
 }
 

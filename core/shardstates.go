@@ -99,9 +99,12 @@ func (s *ShardState) CheckInboundChunk(header *types.Header, inboundChunk *types
 		if common.BytesToHash(hash) != chunkRoot {
 			logChain.Errorf("Chunk proof from shard-%d block-%s is incorrect.", inboundChunk.Txs[0].FromShard, inboundChunk.BlockHash)
 			return false
+		} else {
+			return true
 		}
+	} else {
+		return false
 	}
-	return true
 }
 
 type ShardStates struct {

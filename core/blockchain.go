@@ -311,6 +311,11 @@ func (chain *Blockchain) CheckBlock(block types.Block) error { // do not check s
 		// get the corresponding header
 		fromShard := inboundChunk.Txs[0].FromShard
 		fromShardHeader := chain.ShardStates.StateDB[fromShard].Headers[inboundChunk.BlockHash]
+		
+		fmt.Println(fromShardHeader)
+		fmt.Println(key)
+		fmt.Println(db)
+
 		hash, _ := trie.VerifyProof(fromShardHeader.TxRoot, key, db)
 		if common.BytesToHash(hash) != chunkRoot {
 			return fmt.Errorf("[Node-%d-%d] chunk proof from block-%d-%x is incorrect", chain.config.ShardId, chain.config.NodeId, inboundChunk.Txs[0].FromShard, inboundChunk.BlockHash)

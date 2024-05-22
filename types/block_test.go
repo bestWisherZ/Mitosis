@@ -19,7 +19,7 @@ func TestTransaction(t *testing.T) {
 		accounts[i] = common.HexToAddress(a)
 	}
 
-	tx := NewTransaction(1, 2, accounts[0], accounts[1], 1, []byte{1, 2, 3, 4})
+	tx := NewTransaction(1, 2, accounts[0], accounts[1], 1, []byte{1, 2, 3, 4}, "tx_hash_logic")
 	txCopy := tx.Copy()
 	fmt.Println(txCopy)
 }
@@ -33,8 +33,8 @@ func TestBlock(t *testing.T) {
 	}
 
 	h := NewHeader(1, 0, common.Hash{}, common.Hash{}, common.Hash{}, Bitmap{}, uint64(time.Now().Unix()))
-	tx1 := NewTransaction(1, 2, accounts[0], accounts[1], 1, make([]byte, 0))
-	tx2 := NewTransaction(2, 1, accounts[2], accounts[3], 1, make([]byte, 0))
+	tx1 := NewTransaction(1, 2, accounts[0], accounts[1], 1, make([]byte, 0), "tx_hash_logic")
+	tx2 := NewTransaction(2, 1, accounts[2], accounts[3], 1, make([]byte, 0), "tx_hash_logic")
 	proof := [][]byte{[]byte{1}, []byte{2}}
 	otx := NewOutboundChunk(common.Hash{}, []Transaction{*tx2}, proof)
 	blk := NewBlock(*h, []Transaction{*tx1}, []OutboundChunk{*otx})

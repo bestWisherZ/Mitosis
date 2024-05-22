@@ -8,20 +8,20 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestDataTemplate(t *testing.T) {
-	data := NewDataTemplate(10000, "parameter2", make([]byte, 20))
-	dataBytes := data.MarshalBinary()
-	var n_data DataTemplate
-	n_data.UnmarshalBinary(dataBytes)
-	assert.Equal(t, data, &n_data)
-}
+// func TestDataTemplate(t *testing.T) {
+// 	data := NewDataTemplate(10000, "parameter2", make([]byte, 20))
+// 	dataBytes := data.MarshalBinary()
+// 	var n_data DataTemplate
+// 	n_data.UnmarshalBinary(dataBytes)
+// 	assert.Equal(t, data, &n_data)
+// }
 
 func TestUnsignedTransaction(t *testing.T) {
 	fromAddr := [20]byte{0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x10,
 		0x11, 0x12, 0x13, 0x14, 0x15, 0x16, 0x17, 0x18, 0x19, 0x20}
 	toAddr := [20]byte{0x00, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x10,
 		0x11, 0x12, 0x13, 0x14, 0x15, 0x16, 0x17, 0x18, 0x19, 0x20}
-	tx := NewTransaction(1, 1, fromAddr, toAddr, uint64(1000), make([]byte, 0))
+	tx := NewTransaction(1, 1, fromAddr, toAddr, uint64(1000), make([]byte, 0), "tx_hash_logic")
 
 	fmt.Println(tx.Hash)
 
@@ -42,7 +42,7 @@ func TestOutboundChunk(t *testing.T) {
 		0x11, 0x12, 0x13, 0x14, 0x15, 0x16, 0x17, 0x18, 0x19, 0x20}
 	toAddr := [20]byte{0x00, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x10,
 		0x11, 0x12, 0x13, 0x14, 0x15, 0x16, 0x17, 0x18, 0x19, 0x20}
-	tx := NewTransaction(1, 1, fromAddr, toAddr, uint64(1000), make([]byte, 0))
+	tx := NewTransaction(1, 1, fromAddr, toAddr, uint64(1000), make([]byte, 0), "tx_hash_logic")
 	txs := []Transaction{*tx, *tx}
 	chunkProof := [][]byte{[]byte{0x00, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08}}
 	outboundChunk := NewOutboundChunk(common.Hash{}, txs, chunkProof)
