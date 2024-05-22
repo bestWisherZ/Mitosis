@@ -164,11 +164,17 @@ type TestTx struct {
 	FromShard uint32 `json:"from_shard"`
 	FromAddr  string `json:"from_address"`
 	ToShard   uint32 `json:"to_shard"`
-	ToAddr    map[string]uint64 `json:"to_address"`
+	// // option1: estuary
+	// ToAddr    map[string]uint64 `json:"to_address"`
+	// // option2: monoxide
+	ToAddr string `json:"to_address"`
 }
 
 func (pool *TxPool) loadTestTxs() {
-	filename := "../test/estuary-16-demo/estuary_shard_" + strconv.Itoa(int(pool.config.ShardId)) + "_txs.json"
+	// // option1: estuary
+	// filename := "../test/estuary-dataset/estuary_shard_" + strconv.Itoa(int(pool.config.ShardId)) + "_txs.json"
+	// // option2: monoxide
+	filename := "../test/monoxide-dataset/monoxide_shard_" + strconv.Itoa(int(pool.config.ShardId)) + "_txs.json"
 	file, err:= os.Open(filename)
 	if err != nil {
 		logChain.Errorf("[Node-%d-%d] error loading test transactions", pool.config.ShardId, pool.config.NodeId)
@@ -188,11 +194,17 @@ func (pool *TxPool) loadTestTxs() {
 	for _, testTx := range testTxs {
 		crytporand.Read(data)
 		from_address := common.BytesToAddress([]byte(testTx.FromAddr))
-		var to_address common.Address
-		for k, _ := range testTx.ToAddr {
-			to_address = common.BytesToAddress([]byte(k))
-			break
-		}
+
+		// // option1: estuary
+		// var to_address common.Address
+		// for k, _ := range testTx.ToAddr {
+		// 	to_address = common.BytesToAddress([]byte(k))
+		// 	break
+		// }
+
+		// option2: monoxide
+		to_address := common.BytesToAddress([]byte(testTx.ToAddr))
+
 		tx := types.NewTransaction(testTx.FromShard, testTx.ToShard, from_address, to_address, 0, data, testTx.TxHashLogic)
 		pool.PendingTxs = append(pool.PendingTxs, *tx)
 	}

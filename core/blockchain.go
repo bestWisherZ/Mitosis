@@ -310,11 +310,15 @@ func (chain *Blockchain) CheckBlock(block types.Block) error { // do not check s
 		}
 		// get the corresponding header
 		fromShard := inboundChunk.Txs[0].FromShard
-		fromShardHeader := chain.ShardStates.StateDB[fromShard].Headers[inboundChunk.BlockHash]
-		
-		fmt.Println(fromShardHeader)
-		fmt.Println(key)
-		fmt.Println(db)
+		var fromShardHeader *types.Header
+		for {
+			v, ok := chain.ShardStates.StateDB[fromShard].Headers[inboundChunk.BlockHash]
+			if ok {
+				fromShardHeader = v
+				break
+			}
+			time.Sleep(100 * time.Millisecond)
+		}
 
 		hash, _ := trie.VerifyProof(fromShardHeader.TxRoot, key, db)
 		if common.BytesToHash(hash) != chunkRoot {

@@ -37,7 +37,7 @@ func NewConfig(nodeId uint32) *config.Config {
 		accounts[i] = common.HexToAddress(a)
 	}
 
-	bootnode := "/ip4/127.0.0.1/tcp/54321/p2p/12D3KooWKGouaBBpKA61DDJwZKTfhKFH6K8Q7gVbbKEMs1Ydmq4R"
+	bootnode := "/ip4/127.0.0.1/tcp/54321/p2p/12D3KooWPhFoxrc3Lp9jGb4PJp8t8HkANZxEiB2WyjVTmzhoDqoS"
 
 	return config.NewConfig("test", topo, 4, nodeId, accounts, bootnode)
 }
