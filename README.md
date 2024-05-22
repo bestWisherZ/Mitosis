@@ -67,7 +67,7 @@ stateDB nonce balance stateHash（存合约功能的状态hash，比如分间top
 
 管理分片上的任何区块都广播到其他分片，先验证执行完区块更新状态再去实际变更topo和nodes
 
-## 备注
+### 备注
 
 trie 1.10.0版 16叉改2叉
 
